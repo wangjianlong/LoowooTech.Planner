@@ -45,3 +45,15 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+/packages/
+/LoowooTech.Planner/obj
+/LoowooTech.Planner/bin
+/LoowooTech.Planner.WorkBench/bin
+/LoowooTech.Planner.WorkBench/obj
+/LoowooTech.Planner.Winforms/bin
+/LoowooTech.Planner.Winforms/obj
+/LoowooTech.Planner.UI/bin
+/LoowooTech.Planner.UI/obj
+/LoowooTech.Planner.Common/bin
+/LoowooTech.Planner.Common/obj
