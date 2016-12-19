@@ -1,10 +1,13 @@
-﻿using LoowooTech.Planner;
+﻿using DevExpress.XtraBars.Ribbon;
+using LoowooTech.Planner;
 using LoowooTech.Planner.Winforms;
 using LoowooTech.Planner.WorkBench.Logs;
+using LoowooTech.Planner.WorkBench.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace LoowooTech.Planner.WorkBench
 {
@@ -19,13 +22,37 @@ namespace LoowooTech.Planner.WorkBench
         private static string _userName { get; set; }
         public static string LoginUserName { get { return _userName; }set { _userName = value;  } }
 
+        private static string _configFileName { get; set; }
+        /// <summary>
+        /// 配置文件路径
+        /// </summary>
+        public static string ConfigFileName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_configFileName))
+                {
+                    return System.IO.Path.Combine(Application.StartupPath, System.Configuration.ConfigurationManager.AppSettings["Config"]);
+                }
+                else
+                {
+                    return _configFileName;
+                }
+            }
+            set { _configFileName = value; }
+        }
+
+        static WorkBench()
+        {
+            objToLock = new object();
+        }
         #region  窗体
 
-        private static FormMain _mainForm { get;  set; }
+        private static Form _mainForm { get;  set; }
         /// <summary>
         /// 主窗体
         /// </summary>
-        public static FormMain MainForm
+        public static Form MainForm
         {
             get
             {
@@ -35,7 +62,12 @@ namespace LoowooTech.Planner.WorkBench
                     {
                         if (_mainForm == null || _mainForm.Created == false || _mainForm.IsDisposed == false)
                         {
+                            System.Windows.Forms.Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+                            System.AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+                            SysIniter sysIniter = new SysIniter();
+                            sysIniter.XMLConfigFilePath = ConfigFileName;
+                            sysIniter.Initer();
                         }
                     }
                 }
@@ -53,6 +85,15 @@ namespace LoowooTech.Planner.WorkBench
 
         #endregion
 
+        #region DEV控件
+
+        private static RibbonControl _ribbonControl { get; set; }
+        /// <summary>
+        /// RibbonControl控件
+        /// </summary>
+        public static RibbonControl RibbonControl { get { return _ribbonControl; }set { _ribbonControl = value; } }
+
+        #endregion
 
 
         #region 异常处理事件
@@ -71,8 +112,9 @@ namespace LoowooTech.Planner.WorkBench
                 msg += "\r\n引发异常的对象：" + e.Exception.Source;
                 msg += "\r\n引发异常的方法：" + e.Exception.TargetSite;
                 msg += "\r\n错误堆栈：" + e.Exception.StackTrace.ToString();
-               // LogManager.Log
-            }catch(Exception ex)
+                LogManager.Log.LogError(msg);
+
+            }catch
             {
 
             }
@@ -86,9 +128,9 @@ namespace LoowooTech.Planner.WorkBench
                 string msg = "系统发生未处理的异常！";
                 msg += e.ToString();
                 msg += e.ExceptionObject.ToString();
+                LogManager.Log.LogError(msg);
 
-
-            }catch(Exception ex)
+            }catch
             {
 
             }

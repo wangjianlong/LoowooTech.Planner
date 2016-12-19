@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace LoowooTech.Planner.Winforms
 {
-    public partial class FormMain : Form
+    public partial class FormMain : DevExpress.XtraBars.Ribbon.RibbonForm
     {
         public FormMain()
         {

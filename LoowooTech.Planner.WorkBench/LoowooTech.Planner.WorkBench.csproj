@@ -30,6 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v14.1.Core, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraBars.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
       <Private>True</Private>
@@ -37,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,11 +63,16 @@
     <Compile Include="Logs\Models\LogItem.cs" />
     <Compile Include="Logs\Models\SystemLog.cs" />
     <Compile Include="UI\SysIniter.cs" />
+    <Compile Include="UI\UIIniter.cs" />
     <Compile Include="UI\UIUpdater.cs" />
     <Compile Include="WorkBench.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LoowooTech.Planner.Commands\LoowooTech.Planner.Commands.csproj">
+      <Project>{a02aa2aa-92f0-4ac2-a2b5-1926d525afed}</Project>
+      <Name>LoowooTech.Planner.Commands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LoowooTech.Planner.Common\LoowooTech.Planner.Common.csproj">
       <Project>{a790f4be-d014-4da5-89b9-f3f6056d07bb}</Project>
       <Name>LoowooTech.Planner.Common</Name>

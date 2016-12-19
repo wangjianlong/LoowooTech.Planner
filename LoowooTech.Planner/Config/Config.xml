@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Workbench>
+  <RibbonControl Text="规划实时管理与监察系统">
+    <Pages>
+      
+      !----------------------------地图操作---------------------------------------
+      <PageItem Type="Ribbon.RibbonPage" Text="地图操作">
+        
+        <PageItem Type="Ribbon.RibbonPageGroup" Text="地图浏览">
+          <PageItem Type="BarButtonItem" Name="" Text="属性" LargeGrlyph="False" Group="False" ImageFile="">
+            <CommandClass AssemblyName="LoowooTech.Planner.Commands" ClassName=""/>
+          </PageItem>
+        </PageItem>
+        
+        
+      </PageItem>
+      <PageItem Type="Ribbon.RibbonPage" Text="出图操作">
+        
+      </PageItem>
+    </Pages>
+  </RibbonControl>
+</Workbench>

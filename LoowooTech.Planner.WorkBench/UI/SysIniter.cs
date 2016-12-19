@@ -1,7 +1,9 @@
-﻿using System;
+﻿using LoowooTech.Planner.WorkBench.Logs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace LoowooTech.Planner.WorkBench.UI
 {
@@ -15,7 +17,23 @@ namespace LoowooTech.Planner.WorkBench.UI
 
         public void Initer()
         {
+            Form form = null;
+            System.Windows.Forms.Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(WorkBench.Application_ThreadException);
+            System.AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WorkBench.CurrentDomain_UnhandledException);
 
+            try
+            {
+                UIIniter initer = new UIIniter();
+                initer.XMLConfigFilePath = XMLConfigFilePath;
+                form = initer.CreateUI();
+                form.Show();
+                WorkBench.MainForm = form;
+
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+                LogManager.Log.LogError(ex.ToString());
+            }
         }
     }
 }

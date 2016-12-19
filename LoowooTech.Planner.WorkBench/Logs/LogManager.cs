@@ -33,8 +33,10 @@ namespace LoowooTech.Planner.WorkBench.Logs
         /// 获取SystemLogger实例
         /// </summary>
         public static LogManager Log { get { return LoggerNested.SystemLoggerMan; } }
-
-        public string CurrentLoginName { get { return WorkBench.} }
+        /// <summary>
+        /// 当前登录用户名
+        /// </summary>
+        public string CurrentLoginUserName { get { return WorkBench.LoginUserName; } }
 
         #region 错误日志
 
@@ -79,7 +81,7 @@ namespace LoowooTech.Planner.WorkBench.Logs
             omsg.Category = LogCategoryType.Error;
             omsg.Message = message;
             omsg.Name = "Warn";
-            _errorlog.Warn(omsg, ex);
+            _errorLog.Warn(omsg, ex);
         }
 
         /// <summary>
@@ -115,7 +117,7 @@ namespace LoowooTech.Planner.WorkBench.Logs
             omsg.Category = LogCategoryType.Error;
             omsg.Message = message;
             omsg.Name = "Fatal";
-            _errorlog.Fatal(omsg, ex);
+            _errorLog.Fatal(omsg, ex);
         }
 
         /// <summary>

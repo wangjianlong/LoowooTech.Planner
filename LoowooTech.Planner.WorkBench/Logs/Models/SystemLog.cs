@@ -77,5 +77,76 @@ namespace LoowooTech.Planner.WorkBench.Logs.Models
 
         #endregion
 
+        #region Fatal error
+
+        public void Fatal(object message, Exception ex)
+        {
+            _Log.Fatal(message, ex);
+        }
+
+        public void Fatal(object message)
+        {
+            _Log.Fatal(message);
+        }
+
+        public void FatalFormat(IFormatProvider provider, string format, params object[] args)
+        {
+            _Log.FatalFormat(provider, format, args);
+        }
+
+        public void FatalFormat(string format, params object[] args)
+        {
+            _Log.FatalFormat(format, args);
+        }
+
+        #endregion
+
+        #region Information
+
+        public void Info(object message, Exception ex)
+        {
+            _Log.Info(message, ex);
+        }
+
+        public void Info(object message)
+        {
+            _Log.Info(message);
+        }
+
+        public void InfoFormat(IFormatProvider provider, string format, params object[] args)
+        {
+            _Log.InfoFormat(provider, format, args);
+        }
+
+        public void InfoFormat(string format, params object[] args)
+        {
+            _Log.InfoFormat(format, args);
+        }
+
+        #endregion
+
+        #region Warn
+
+        public void Warn(object message, Exception ex)
+        {
+            _Log.Warn(message, ex);
+        }
+
+        public void Warn(object message)
+        {
+            _Log.Warn(message);
+        }
+
+        public void WarnFormat(IFormatProvider provider, string format, params object[] args)
+        {
+            _Log.WarnFormat(provider, format, args);
+        }
+
+        public void WarnFormat(string format, params object[] args)
+        {
+            _Log.WarnFormat(format, args);
+        }
+
+        #endregion
     }
 }
