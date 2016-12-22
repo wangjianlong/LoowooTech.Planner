@@ -1,8 +1,8 @@
 ﻿using DevExpress.XtraBars;
 using DevExpress.XtraBars.Navigation;
 using DevExpress.XtraBars.Ribbon;
-using LoowooTech.Planner.Commands;
-using LoowooTech.Planner.Winforms;
+using LoowooTech.Planner.WorkBench.Commands;
+using LoowooTech.Planner.WorkBench.Forms;
 using LoowooTech.Planner.WorkBench.Logs;
 using System;
 using System.Collections.Generic;
@@ -53,15 +53,163 @@ namespace LoowooTech.Planner.WorkBench.UI
 
                     CreateRibbonControl(frm);
                     CreatePage(WorkBench.RibbonControl, xmlDoc);
-
+                    CreateQuickAccessToolBar(WorkBench.RibbonControl, xmlDoc);
+                    CreateStatusbar(frm, WorkBench.RibbonControl, xmlDoc);
+                    CreateApplicationMenu(WorkBench.RibbonControl, xmlDoc);
                 }
+                frm.WindowState = FormWindowState.Normal;
+                frm.ResumeLayout(false);
 
             }catch(Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex);
-                LogManager.Log.LogError(ex.ToString());
+                //LogManager.Log.LogError(ex.ToString());
             }
             return frm;
+        }
+        /// <summary>
+        /// 作用：创建应用菜单
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月20日15:11:35
+        /// </summary>
+        /// <param name="ribbonControl"></param>
+        /// <param name="xmlDocment"></param>
+        private void CreateApplicationMenu(RibbonControl ribbonControl,XmlDocument xmlDocment)
+        {
+            if (ribbonControl == null || xmlDocment == null)
+            {
+                return;
+            }
+            XmlNode node = xmlDocment.SelectSingleNode("/Workbench/RibbonControl/ApplicationMenu");
+            if (node == null)
+            {
+                return;
+            }
+
+            string load = GetAttribute(node, "Load");
+            if (string.IsNullOrEmpty(load) == false || load.ToUpper().IndexOf("F") > -1)
+            {
+                return;
+            }
+            XmlNodeList xmlNodeListPageItem = node.SelectNodes("MenuItem");
+            if (xmlNodeListPageItem == null)
+            {
+                return;
+            }
+
+            ApplicationMenu applicationMenu1 = new ApplicationMenu();
+
+            for(var i = 0; i < xmlNodeListPageItem.Count; i++)
+            {
+                XmlNode xmlNodePageItem = xmlNodeListPageItem.Item(i);
+                BarItem item = CreateItem(ribbonControl, xmlNodePageItem) as BarItem;
+                if (item != null)
+                {
+                    applicationMenu1.ItemLinks.Add(item);
+                    ribbonControl.Items.Add(item);
+                }
+            }
+            applicationMenu1.Ribbon = ribbonControl;
+            ribbonControl.ApplicationButtonDropDownControl = applicationMenu1;
+        }
+
+        /// <summary>
+        /// 作用：创建状态栏控件
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月20日15:02:58
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="ribbonControl"></param>
+        /// <param name="xmlDocment"></param>
+        private void CreateStatusbar(Form form,RibbonControl ribbonControl,XmlDocument xmlDocment)
+        {
+            XmlNode node = xmlDocment.SelectSingleNode("/Workbench/RibbonControl/StatusBar");
+            if (node == null)
+            {
+                return ;
+            }
+            string load = GetAttribute(node, "Load");
+            if (string.IsNullOrEmpty(load) == false 
+                && load.ToUpper().IndexOf("F") > -1)
+            {
+                return;
+            }
+
+            XmlNodeList nodeListStatusbar = node.SelectNodes("BarStaticItem");
+            if (nodeListStatusbar == null)
+            {
+                return;
+            }
+            RibbonStatusBar ribbonStatusbar = new RibbonStatusBar();
+
+            for(var i = 0; i < nodeListStatusbar.Count; i++)
+            {
+                XmlNode nodeStatusbar = nodeListStatusbar.Item(i);
+                BarItem barItem = CreateItem(ribbonControl, nodeStatusbar) as BarItem;
+                if (barItem != null)
+                {
+                    ribbonStatusbar.ItemLinks.Add(barItem);
+                }
+            }
+            string visible = GetAttribute(node, "Visible");
+            if (string.IsNullOrEmpty(visible) == false
+               && visible.ToUpper().IndexOf("F") > -1)
+                ribbonStatusbar.Visible = false;
+            else
+                ribbonStatusbar.Visible = true;
+
+            form.Controls.Add(ribbonStatusbar);
+            ribbonControl.StatusBar = ribbonStatusbar;
+            ribbonStatusbar.Ribbon = ribbonControl;
+            ribbonStatusbar.Dock = DockStyle.Bottom;
+            WorkBench.StatusBar = ribbonStatusbar;
+        }
+
+        /// <summary>
+        /// 作用：创建快捷访问工具
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月20日14:51:35
+        /// </summary>
+        /// <param name="ribbonControl"></param>
+        /// <param name="xmlDocument"></param>
+        private void CreateQuickAccessToolBar(RibbonControl ribbonControl,XmlDocument xmlDocument)
+        {
+            ribbonControl.Toolbar.ItemLinks.Clear();
+            ribbonControl.Toolbar.ShowCustomizeItem = false;
+
+            XmlNode node = xmlDocument.SelectSingleNode("/Workbench/RibbonControl/QuickAccessToolBar");
+            if (node == null)
+            {
+                return;
+            }
+            string load = GetAttribute(node, "Load");
+            if (string.IsNullOrEmpty(load) == false && load.ToUpper().IndexOf("F") > -1)
+            {
+                return;
+            }
+
+            XmlNodeList nodeListToolBarItem = node.SelectNodes("ToolBarItem");
+            if (nodeListToolBarItem == null)
+            {
+                return;
+            }
+
+            for(var i = 0; i < nodeListToolBarItem.Count; i++)
+            {
+                XmlNode nodeToolBarItem = nodeListToolBarItem.Item(i);
+                BarButtonItem item = CreateItem(ribbonControl, nodeToolBarItem) as BarButtonItem;
+                if (item != null)
+                {
+                    if (item.LargeGlyph != null && item.Glyph == null)
+                    {
+                        item.Glyph = item.LargeGlyph;
+                    }
+
+                    ribbonControl.Toolbar.ItemLinks.Add(item);
+                    ribbonControl.Items.Add(item);
+                }
+            }
+
         }
 
         /// <summary>
@@ -79,7 +227,8 @@ namespace LoowooTech.Planner.WorkBench.UI
                 return;
             }
             string load = GetAttribute(node, "Load");
-            if (string.IsNullOrEmpty(load) == false && load.ToUpper().IndexOf("F") > -1)
+            if (string.IsNullOrEmpty(load) == false 
+                && load.ToUpper().IndexOf("F") > -1)
             {
                 return;
             }
@@ -132,12 +281,150 @@ namespace LoowooTech.Planner.WorkBench.UI
                     obj = CreateItemRibbonPageGroup(ribbonControl, xmlNode);
                     break;
                 case "BarButtonItem":
-
+                    obj = CreateItemBarButtonItem(xmlNode);
+                    break;
+                case "BarStaticItem":
+                    obj = CreateItemBarStaticItem(xmlNode);
+                    break;
+                case "ApplicationMenu":
+                    obj = CreateItemApplicationMenu(xmlNode);
+                    break;
+                case "BarSubItem":
+                    obj = CreateItemBarSubItem(xmlNode);
                     break;
             }
             return obj;
         }
+        private object CreateItemBarSubItem(XmlNode xmlNode)
+        {
+            if (xmlNode == null)
+            {
+                return null;
+            }
+            BarSubItem barSubItem = CreateInstance(AssemblyNameOfDevExpress, "BarSubItem") as BarSubItem;
+            if (barSubItem == null)
+            {
+                return null;
+            }
+            string strName = GetAttribute(xmlNode, "Name");
+            string strText = GetAttribute(xmlNode, "Text");
+            string strImageFile = GetAttribute(xmlNode, "ImageFile");
+            string strVisible = GetAttribute(xmlNode, "Visible");
+            string strLargeGlyph = GetAttribute(xmlNode, "LargeGlyph");
 
+
+            Image image = LoadImageFromResource(strImageFile);
+            bool visible = true;
+            if (string.IsNullOrEmpty(strVisible) == false && strVisible.ToUpper().IndexOf("F") > -1)
+                visible = false;
+            bool largeGlyph = false;
+            bool.TryParse(strLargeGlyph, out largeGlyph);
+
+            barSubItem.Name = strName;
+            barSubItem.Caption = strText;
+
+            if (visible)
+            {
+                barSubItem.Visibility = BarItemVisibility.Always;
+            }
+            else
+            {
+                barSubItem.Visibility = BarItemVisibility.Never;
+            }
+            if (largeGlyph)
+            {
+                barSubItem.RibbonStyle = RibbonItemStyles.Large;
+                barSubItem.LargeGlyph = image;
+            }
+            else
+            {
+                barSubItem.RibbonStyle = RibbonItemStyles.SmallWithText;
+                barSubItem.Glyph = image;
+            }
+            return barSubItem;
+        }
+
+        /// <summary>
+        /// 作用：创建应用菜单
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月20日14:38:24
+        /// </summary>
+        /// <param name="xmlNode"></param>
+        /// <returns></returns>
+        private object CreateItemApplicationMenu(XmlNode xmlNode)
+        {
+            if (xmlNode == null 
+                || xmlNode.NodeType == XmlNodeType.Comment)
+            {
+                return null;
+            }
+
+            object obj = CreateInstance(AssemblyNameOfDevExpress, "ApplicationMenu");
+            if (obj == null)
+            {
+                return null;
+            }
+
+            string name = GetAttribute(xmlNode, "Name");
+            (obj as ApplicationMenu).Name = name;
+            return obj;
+        }
+        /// <summary>
+        /// 作用：创建静态
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月20日14:32:29
+        /// </summary>
+        /// <param name="xmlNode"></param>
+        /// <returns></returns>
+        private object CreateItemBarStaticItem(XmlNode xmlNode)
+        {
+            if (xmlNode == null 
+                || xmlNode.NodeType == XmlNodeType.Comment)
+            {
+                return null;
+            }
+
+            object obj = CreateInstance(AssemblyNameOfDevExpress, "BarStaticItem");
+            if (obj == null)
+            {
+                return null;
+            }
+
+            string name = GetAttribute(xmlNode, "Name");
+            string text = GetAttribute(xmlNode, "Text");
+            (obj as BarStaticItem).Name = name;
+            (obj as BarStaticItem).Caption = text;
+
+            string alignment = GetAttribute(xmlNode, "Alignment");
+            if (string.IsNullOrEmpty(alignment))
+            {
+                alignment = "Default";
+            }
+
+            alignment = alignment.ToLower();
+
+            if (alignment.IndexOf("right") > -1)
+            {
+                (obj as BarStaticItem).Alignment = BarItemLinkAlignment.Right;
+            }else if (alignment.IndexOf("left") > -1)
+            {
+                (obj as BarStaticItem).Alignment = BarItemLinkAlignment.Left;
+            }
+            else
+            {
+                (obj as BarStaticItem).Alignment = BarItemLinkAlignment.Default;
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// 作用：创建按钮
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月20日14:23:47
+        /// </summary>
+        /// <param name="xmlNode"></param>
+        /// <returns></returns>
         private object CreateItemBarButtonItem(XmlNode xmlNode)
         {
             if (xmlNode == null || xmlNode.NodeType == XmlNodeType.Comment)
@@ -162,12 +449,43 @@ namespace LoowooTech.Planner.WorkBench.UI
                 }
                 barButtonItem.Visibility = visible ? BarItemVisibility.Always : BarItemVisibility.Never;
 
+                string strImageFile = GetAttribute(xmlNode, "ImageFile");
+                if (string.IsNullOrEmpty(strImageFile))
+                {
+                    strImageFile = barButtonItem.Name;
+                }
+                Image image = LoadImageFromResource(strImageFile);
                 bool largeGlyph = false;
                 if(bool.TryParse(GetAttribute(xmlNode,"LargeGlyph"),out largeGlyph) && largeGlyph)
                 {
                     barButtonItem.RibbonStyle = RibbonItemStyles.Large;
-                  
+                    barButtonItem.LargeGlyph = image;
                 }
+                else
+                {
+                    barButtonItem.RibbonStyle = RibbonItemStyles.SmallWithText;
+                    barButtonItem.Glyph = image;
+                }
+                XmlNode nodeCmdCls = xmlNode.SelectSingleNode("CmmandClass");
+                IUICommand uiCmd = new UICommand();
+                uiCmd.AssemblyName = GetAttribute(nodeCmdCls, "AssemblyName");
+                uiCmd.ClassName = GetAttribute(nodeCmdCls, "ClassName");
+
+                string strBeginGroup = GetAttribute(xmlNode, "Group");
+                bool beginGroup = false;
+                if (string.IsNullOrEmpty(strBeginGroup) == false && strBeginGroup.ToUpper().IndexOf("T") > -1)
+                {
+                    beginGroup = true;
+                }
+                uiCmd.Group = beginGroup;
+                uiCmd.Parameter = GetAttribute(nodeCmdCls, "Parameter");
+                uiCmd.BarButtonItem = barButtonItem;
+
+                UICommand.UICommands.Add(uiCmd);
+
+                barButtonItem.ItemClick += new ItemClickEventHandler(uiCmd.OnClick);
+                barButtonItem.Tag = uiCmd;
+
 
                 return barButtonItem;
 
@@ -435,7 +753,8 @@ namespace LoowooTech.Planner.WorkBench.UI
             try
             {
                 XmlNode node = xmlDoc.SelectSingleNode(path);
-                if (node != null && node.Attributes[attribute] != null)
+                if (node != null 
+                    && node.Attributes[attribute] != null)
                 {
                     return node.Attributes[attribute].Value;
                 }
@@ -450,7 +769,10 @@ namespace LoowooTech.Planner.WorkBench.UI
         {
             try
             {
-                if (node != null && node.Attributes != null && node.Attributes.Count > 0 && node.Attributes[attributeName] != null)
+                if (node != null 
+                    && node.Attributes != null 
+                    && node.Attributes.Count > 0 
+                    && node.Attributes[attributeName] != null)
                 {
                     return node.Attributes[attributeName].Value;
                 }

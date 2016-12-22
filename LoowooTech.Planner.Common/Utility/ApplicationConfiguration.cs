@@ -63,7 +63,8 @@ namespace LoowooTech.Planner.Common.Utility
             {
                 _DataSourceConfigFile = null;
             }
-            _DefaultDataSourceName = ConfigurationManager.AppSettings["DefaultDataSourceName"];
+            var name= ConfigurationManager.AppSettings["DefaultDataSourceName"];
+            _DefaultDataSourceName = name;
         }
 
         public object Create(object parent,object configContext,XmlNode section)

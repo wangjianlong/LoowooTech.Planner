@@ -35,6 +35,19 @@
     <Reference Include="DevExpress.Utils.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraBars.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraEditors.v14.1, Version=14.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.AxControls, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.Carto, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Controls, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.System, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
       <Private>True</Private>
@@ -51,17 +64,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\BaseTLWCommand.cs" />
+    <Compile Include="Commands\ITLWCommand.cs" />
+    <Compile Include="Commands\IUICommand.cs" />
+    <Compile Include="Commands\UICommand.cs" />
     <Compile Include="Database\DataSource.cs" />
     <Compile Include="Database\DbFactory.cs" />
     <Compile Include="Database\IDbCommandHelp.cs" />
     <Compile Include="Database\IDbHelp.cs" />
+    <Compile Include="Database\MapOperator.cs" />
     <Compile Include="Database\Models\ColumnType.cs" />
     <Compile Include="Database\Models\DataSourceTypes.cs" />
     <Compile Include="Database\Models\DbHelpClassTypes.cs" />
     <Compile Include="Database\SQL\SqlDbHelp.cs" />
+    <Compile Include="Forms\FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SketchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SketchForm.Designer.cs">
+      <DependentUpon>SketchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InstanceHelper.cs" />
     <Compile Include="Logs\LogManager.cs" />
     <Compile Include="Logs\Models\LogItem.cs" />
     <Compile Include="Logs\Models\SystemLog.cs" />
+    <Compile Include="UI\AutoRunner.cs" />
+    <Compile Include="UI\CommandShowSketchForm.cs" />
     <Compile Include="UI\SysIniter.cs" />
     <Compile Include="UI\UIIniter.cs" />
     <Compile Include="UI\UIUpdater.cs" />
@@ -69,13 +102,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LoowooTech.Planner.Commands\LoowooTech.Planner.Commands.csproj">
-      <Project>{a02aa2aa-92f0-4ac2-a2b5-1926d525afed}</Project>
-      <Name>LoowooTech.Planner.Commands</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LoowooTech.Planner.Common\LoowooTech.Planner.Common.csproj">
       <Project>{a790f4be-d014-4da5-89b9-f3f6056d07bb}</Project>
       <Name>LoowooTech.Planner.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoowooTech.Planner.Controls\LoowooTech.Planner.Controls.csproj">
+      <Project>{F2BD6C52-40F5-4970-80F5-97EB7E36A915}</Project>
+      <Name>LoowooTech.Planner.Controls</Name>
     </ProjectReference>
     <ProjectReference Include="..\LoowooTech.Planner.Winforms\LoowooTech.Planner.Winforms.csproj">
       <Project>{30553db5-17a7-42ef-b291-32f8b6afd5e8}</Project>
@@ -84,6 +117,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SketchForm.resx">
+      <DependentUpon>SketchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

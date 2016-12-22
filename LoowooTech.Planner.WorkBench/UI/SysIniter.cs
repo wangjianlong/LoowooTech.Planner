@@ -1,4 +1,6 @@
-﻿using LoowooTech.Planner.WorkBench.Logs;
+﻿
+using LoowooTech.Planner.WorkBench.Forms;
+using LoowooTech.Planner.WorkBench.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +34,31 @@ namespace LoowooTech.Planner.WorkBench.UI
             }catch(Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex);
-                LogManager.Log.LogError(ex.ToString());
+                //LogManager.Log.LogError(ex.ToString());
             }
+
+            System.Windows.Forms.Application.DoEvents();
+
+            try
+            {
+                AutoRunner runner = new AutoRunner();
+                runner.XMLConfigFilePath = XMLConfigFilePath;
+                runner.Start();
+
+
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+               // LogManager.Log.LogError(ex.ToString());
+            }
+
+            if(form is FormMain)
+            {
+               // WorkBench.AxToolbarControl = (form as FormMain).axToolbarControl1;
+               // (form as FormMain).timer1.Enabled = true;
+            }
+
+
         }
     }
 }

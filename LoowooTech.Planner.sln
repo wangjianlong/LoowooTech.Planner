@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Planner.Common",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Planner.Commands", "LoowooTech.Planner.Commands\LoowooTech.Planner.Commands.csproj", "{A02AA2AA-92F0-4AC2-A2B5-1926D525AFED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Planner.Controls", "LoowooTech.Planner.Controls\LoowooTech.Planner.Controls.csproj", "{F2BD6C52-40F5-4970-80F5-97EB7E36A915}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{A02AA2AA-92F0-4AC2-A2B5-1926D525AFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A02AA2AA-92F0-4AC2-A2B5-1926D525AFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A02AA2AA-92F0-4AC2-A2B5-1926D525AFED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2BD6C52-40F5-4970-80F5-97EB7E36A915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2BD6C52-40F5-4970-80F5-97EB7E36A915}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2BD6C52-40F5-4970-80F5-97EB7E36A915}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2BD6C52-40F5-4970-80F5-97EB7E36A915}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

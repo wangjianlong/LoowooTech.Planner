@@ -5,6 +5,12 @@
       
       !----------------------------地图操作---------------------------------------
       <PageItem Type="Ribbon.RibbonPage" Text="地图操作">
+
+        <PageItem Type="Ribbon.RibbonPageGroup" Text="外部数据">
+          <PageItem Type="BarButtonItem" Text="加载外部数据" LargeGlyph="True" Group="False" ImageFile="DEV\Images\Actions\AddFile_32x32.png">
+            <CommandClass AssemblyName="ESRI.ArcGIS.Controls" ClassName="ESRI.ArcGIS.Controls.ControlsAddDataCommandClass"/>
+          </PageItem>
+        </PageItem>
         
         <PageItem Type="Ribbon.RibbonPageGroup" Text="地图浏览">
           <PageItem Type="BarButtonItem" Name="" Text="属性" LargeGrlyph="False" Group="False" ImageFile="">
@@ -19,4 +25,7 @@
       </PageItem>
     </Pages>
   </RibbonControl>
+  <AutoRunCommand>
+    <CommandClass AssemblyName="" ClassName="" Parameter="True"/>
+  </AutoRunCommand>
 </Workbench>

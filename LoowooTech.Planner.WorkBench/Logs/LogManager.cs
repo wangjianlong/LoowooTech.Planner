@@ -22,7 +22,7 @@ namespace LoowooTech.Planner.WorkBench.Logs
 
         }
 
-        public LogManager()
+        private LogManager()
         {
             _loginLog = new SystemLog("LoginLogger");
             _operationLog = new SystemLog("OperationLogger");

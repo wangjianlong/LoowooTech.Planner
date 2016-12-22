@@ -1,6 +1,7 @@
 ﻿using DevExpress.XtraBars.Ribbon;
+using ESRI.ArcGIS.Controls;
+using ESRI.ArcGIS.SystemUI;
 using LoowooTech.Planner;
-using LoowooTech.Planner.Winforms;
 using LoowooTech.Planner.WorkBench.Logs;
 using LoowooTech.Planner.WorkBench.UI;
 using System;
@@ -81,8 +82,45 @@ namespace LoowooTech.Planner.WorkBench
 
         #region  管理主窗体界面
 
+        /// <summary>
+        /// 作用：设置RibbonControl中被选中的页
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月22日19:10:26
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool SetSelectedPage(string name)
+        {
+            bool setted = false;
+            try
+            {
+                UIUpdater updater = new UIUpdater();
+                setted = updater.SetSelectPage(name);
+
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+            return setted;
+        }
 
 
+        public static bool SetStatusBarValue(string name,string value)
+        {
+            bool setted = false;
+            try
+            {
+                UIUpdater updater = new UIUpdater();
+                setted = updater.SetStatusBarValue(name, value);
+
+
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+            }
+            return setted;
+        }
         #endregion
 
         #region DEV控件
@@ -92,9 +130,110 @@ namespace LoowooTech.Planner.WorkBench
         /// RibbonControl控件
         /// </summary>
         public static RibbonControl RibbonControl { get { return _ribbonControl; }set { _ribbonControl = value; } }
+        private static RibbonStatusBar _statisBar { get; set; }
+        public static RibbonStatusBar StatusBar
+        {
+            get
+            {
+                if (_statisBar == null || _statisBar.Created == false || _statisBar.IsDisposed)
+                {
+                    return null;
+                }
+                return _statisBar;
+            }
+            set
+            {
+                _statisBar = value;
+            }
+        }
 
         #endregion
 
+        #region ESRI控件
+        private static AxPageLayoutControl _axPageLayoutControl { get; set; }
+        public static AxPageLayoutControl AxPageLayoutControl
+        {
+            get { return _axPageLayoutControl; }
+            set
+            {
+                try
+                {
+                    _axPageLayoutControl = value;
+                    if (_axToolbarControl != null && _axToolbarControl.IsDisposed == false && _axToolbarControl.Created)
+                    {
+                        if (AxPageLayoutControl != null)
+                        {
+                            _axToolbarControl.SetBuddyControl(AxPageLayoutControl.Object);
+                        }
+                        else
+                        {
+                            _axToolbarControl.SetBuddyControl(null);
+                        }
+                    }
+
+                }catch(Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                    //LogManager.Log.LogError(ex.ToString());
+                }
+            }
+        }
+
+        private static AxToolbarControl _axToolbarControl { get; set; }
+        public static AxToolbarControl AxToolbarControl
+        {
+            get { return _axToolbarControl; }
+            set
+            {
+                try
+                {
+                    _axToolbarControl = value;
+                    if (value != null && value.Created && value.IsDisposed == false)
+                    {
+                        _axToolbarControl.OperationStack = new ControlsOperationStackClass();
+                        if (AxMapControl != null)
+                        {
+                            _axToolbarControl.SetBuddyControl(AxMapControl.Object);
+                        }else if (AxPageLayoutControl != null)
+                        {
+                            _axToolbarControl.SetBuddyControl(AxPageLayoutControl.Object);
+                        }
+                    }
+                }catch(Exception ex)
+                {
+                    //LogManager.Log.LogError(ex.ToString());
+                }
+            }
+        }
+        private static AxMapControl _axMapControl { get; set; }
+        public static AxMapControl AxMapControl
+        {
+            get { return _axMapControl; }
+            set
+            {
+                try
+                {
+                    _axMapControl = null;
+                    if (_axMapControl != null && _axMapControl.IsDisposed == false && _axMapControl.Created)
+                    {
+                        if (_axMapControl != null)
+                        {
+                            _axToolbarControl.SetBuddyControl(_axMapControl.Object);
+                        }
+                        else
+                        {
+                            _axToolbarControl.SetBuddyControl(null);
+                        }
+                    }
+
+                }catch(Exception ex)
+                {
+                    //LogManager.Log.LogError(ex.ToString());
+                }
+            }
+        }
+
+        #endregion
 
         #region 异常处理事件
         /// <summary>
@@ -112,7 +251,8 @@ namespace LoowooTech.Planner.WorkBench
                 msg += "\r\n引发异常的对象：" + e.Exception.Source;
                 msg += "\r\n引发异常的方法：" + e.Exception.TargetSite;
                 msg += "\r\n错误堆栈：" + e.Exception.StackTrace.ToString();
-                LogManager.Log.LogError(msg);
+                // LogManager.Log.LogError(msg);
+                throw new Exception(msg);
 
             }catch
             {
@@ -128,7 +268,8 @@ namespace LoowooTech.Planner.WorkBench
                 string msg = "系统发生未处理的异常！";
                 msg += e.ToString();
                 msg += e.ExceptionObject.ToString();
-                LogManager.Log.LogError(msg);
+                throw new Exception(msg);
+               // LogManager.Log.LogError(msg);
 
             }catch
             {

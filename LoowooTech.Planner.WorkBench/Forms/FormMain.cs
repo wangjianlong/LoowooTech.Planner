@@ -7,13 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace LoowooTech.Planner.Winforms
+namespace LoowooTech.Planner.WorkBench.Forms
 {
     public partial class FormMain : DevExpress.XtraBars.Ribbon.RibbonForm
     {
         public FormMain()
         {
             InitializeComponent();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
         }
     }
 }

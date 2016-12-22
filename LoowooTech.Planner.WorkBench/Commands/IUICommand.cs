@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LoowooTech.Planner.Commands
+namespace LoowooTech.Planner.WorkBench.Commands
 {
     /// <summary>
     /// 绑定在界面上的按钮
