@@ -1,4 +1,5 @@
-﻿using ESRI.ArcGIS.Controls;
+﻿using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.Controls;
 using LoowooTech.Planner.Controls;
 using LoowooTech.Planner.WorkBench.Database;
 using System;
@@ -26,7 +27,18 @@ namespace LoowooTech.Planner.WorkBench.Forms
 
         private void timerLoad_Tick(object sender, EventArgs e)
         {
+            try
+            {
+                timerLoad.Enabled = false;
+                this.Cursor = Cursors.WaitCursor;
 
+
+
+
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+            }
         }
 
         private void SketchForm_Load(object sender, EventArgs e)
@@ -57,7 +69,13 @@ namespace LoowooTech.Planner.WorkBench.Forms
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// 作用：当鼠标在地图上移动时，动态实时显示坐标信息
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月23日09:32:55
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mapMain_OnMouseMove(object sender, IMapControlEvents2_OnMouseMoveEvent e)
         {
             try
@@ -71,6 +89,43 @@ namespace LoowooTech.Planner.WorkBench.Forms
             {
                 WorkBench.SetStatusBarValue("PointXY", "未知错误");
                 System.Diagnostics.Trace.Write(ex);
+            }
+        }
+
+        /// <summary>
+        /// 作用：地图选中要素事件
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月23日10:34:00
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mapMain_OnSelectionChanged(object sender, EventArgs e)
+        {
+            IMap map = mapMain.Map;
+            if (map.SelectionCount > 0)
+            {
+                WorkBench.SetStatusBarValue("Message", string.Format("选中{0}个要素", map.SelectionCount));
+            }
+            else
+            {
+                WorkBench.SetStatusBarValue("Message", "");
+            }
+        }
+
+        private void mapMain_OnExtentUpdated(object sender, IMapControlEvents2_OnExtentUpdatedEvent e)
+        {
+
+            try
+            {
+
+                string scale = Math.Round(mapMain.ActiveView.FocusMap.MapScale, 3).ToString("f2");
+                WorkBench.SetStatusBarValue("Scale", string.Format("比例尺：1：{0}", scale));
+
+            }
+            catch (Exception ex)
+            {
+                WorkBench.SetStatusBarValue("Scale", "");
+                System.Diagnostics.Trace.WriteLine(ex);
             }
         }
     }

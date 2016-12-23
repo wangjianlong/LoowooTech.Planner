@@ -24,6 +24,16 @@
         
       </PageItem>
     </Pages>
+
+    !------------------------------------系统状态栏----------------------------------------------
+    <StatusBar Name="StaticBar" Load="True">
+      <BarStaticItem Type="BarStaticItem" Name="Message" Text="" Alignment="Left"></BarStaticItem>
+      <BarStaticItem Type="BarStaticItem" Name="PointXY" Text="" Alignment="Right"></BarStaticItem>
+      <BarStaticItem Type="BarStaticItem" Name="Scale" Text="" Alignment="Right"></BarStaticItem>
+      <BarStaticItem Type="BarStaticItem" Name="LoginUserName" Text="" Alignment="Right"></BarStaticItem>
+      <BarStaticItem Type="BarStaticItem" Name="LoginTime" Text="" Alignment="Right"></BarStaticItem>
+      <BarStaticItem Type="BarStaticItem" Name="smnuLWis" Text="杭州陆吾科技信息咨询有限公司 研发" Alignment="Right"></BarStaticItem>
+    </StatusBar>
   </RibbonControl>
   <AutoRunCommand>
     <CommandClass AssemblyName="" ClassName="" Parameter="True"/>

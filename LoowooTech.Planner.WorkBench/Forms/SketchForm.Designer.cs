@@ -60,6 +60,8 @@
             this.mapMain.Size = new System.Drawing.Size(834, 521);
             this.mapMain.TabIndex = 0;
             this.mapMain.OnMouseMove += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseMoveEventHandler(this.mapMain_OnMouseMove);
+            this.mapMain.OnSelectionChanged += new System.EventHandler(this.mapMain_OnSelectionChanged);
+            this.mapMain.OnExtentUpdated += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnExtentUpdatedEventHandler(this.mapMain_OnExtentUpdated);
             // 
             // timerLoad
             // 
