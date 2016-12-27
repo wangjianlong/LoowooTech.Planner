@@ -9,18 +9,11 @@ using System.Windows.Forms;
 
 namespace LoowooTech.Planner.WorkBench.Forms
 {
-    public partial class FormMain : DevExpress.XtraBars.Ribbon.RibbonForm
+    public partial class TOCPad : DevExpress.XtraEditors.XtraUserControl
     {
-        public FormMain()
+        public TOCPad()
         {
             InitializeComponent();
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            timer1.Enabled = false;
-            //WorkBench.UpdateUI();
-            timer1.Enabled = true;
         }
     }
 }

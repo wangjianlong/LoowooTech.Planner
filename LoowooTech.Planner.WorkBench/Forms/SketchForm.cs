@@ -1,5 +1,6 @@
 ﻿using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
+using LoowooTech.Planner.Common;
 using LoowooTech.Planner.Controls;
 using LoowooTech.Planner.WorkBench.Database;
 using System;
@@ -25,6 +26,11 @@ namespace LoowooTech.Planner.WorkBench.Forms
             InitializeComponent();
         }
 
+        public void LoadMapData()
+        {
+            timerLoad.Enabled = true;
+        }
+
         private void timerLoad_Tick(object sender, EventArgs e)
         {
             try
@@ -32,12 +38,22 @@ namespace LoowooTech.Planner.WorkBench.Forms
                 timerLoad.Enabled = false;
                 this.Cursor = Cursors.WaitCursor;
 
+                MapDataLoader mapDataLoader = new MapDataLoader();
+                mapDataLoader.Load(mapMain.Object as IMapControl2);
+                _mapOperator = new MapOperator();
+                _mapOperator.Map = mapMain.Map;
 
 
 
             }catch(Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex);
+            }
+            finally
+            {
+                timerLoad.Enabled = false;
+                label1.Visible = false;
+                this.Cursor = Cursors.Default;
             }
         }
 
@@ -111,7 +127,13 @@ namespace LoowooTech.Planner.WorkBench.Forms
                 WorkBench.SetStatusBarValue("Message", "");
             }
         }
-
+        /// <summary>
+        /// 作用：动态显示地图比例尺
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月27日14:08:11
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mapMain_OnExtentUpdated(object sender, IMapControlEvents2_OnExtentUpdatedEvent e)
         {
 
@@ -127,6 +149,12 @@ namespace LoowooTech.Planner.WorkBench.Forms
                 WorkBench.SetStatusBarValue("Scale", "");
                 System.Diagnostics.Trace.WriteLine(ex);
             }
+        }
+
+        private void SketchForm_Activated(object sender, EventArgs e)
+        {
+            WorkBench.AxMapControl = mapMain;
+            mapMain_OnExtentUpdated(null, null);
         }
     }
 }

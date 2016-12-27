@@ -112,6 +112,12 @@ namespace LoowooTech.Planner.Common
             }
         }
 
+        /// <summary>
+        /// 作用：加载地图文件
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月27日14:10:11
+        /// </summary>
+        /// <param name="mapControl"></param>
         public void　Load(IMapControl2 mapControl)
         {
             try
@@ -127,12 +133,65 @@ namespace LoowooTech.Planner.Common
                 }
                 if (string.IsNullOrEmpty(_templateMxdFileName))
                 {
-
+                    _templateMxdFileName = PlannerPathHelp.GetFilePath(XmlHelper.GetAttributeValue(noderoot, "TemplateMXDFile"));
                 }
+                if (string.IsNullOrEmpty(_systemMxdFileName))
+                {
+                    _systemMxdFileName = PlannerPathHelp.GetFilePath(XmlHelper.GetAttributeValue(noderoot, "SystemMXDFile"));
+                }
+                var temp = XmlHelper.GetAttributeValue(noderoot, "DirectlyLoadedSystemMXDIfExist");
+                if (!string.IsNullOrEmpty(temp))
+                {
+                    _directlyLoadedSystemMxdifExist = temp.ToUpper().IndexOf("F") > -1 ? false : true;
+                }
+
+                if (_directlyLoadedSystemMxdifExist && System.IO.File.Exists(_systemMxdFileName))
+                {
+                    mapControl.Load(_systemMxdFileName);
+                }
+                else
+                {
+                   // mapControl.Load(xmlDocument);
+                }
+
 
             }catch(Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex);
+            }
+        }
+
+        private void Load(IMapControl2 mapControl,XmlDocument xmlDocument)
+        {
+            try
+            {
+                XmlNode nodeMap = xmlDocument.SelectSingleNode("/MapDataLoadConfig/Map");
+                if (nodeMap == null)
+                {
+                    return;
+                }
+                IMapDocument templateDocument = OpenTemplateDocument();
+                IMap templateMap = templateDocument.get_Map(0);
+                IMap map = new MapClass();
+                if (XmlHelper.GetAttributeValue(nodeMap, "Name") != string.Empty)
+                {
+                    map.Name = XmlHelper.GetAttributeValue(nodeMap, "Name");
+                }
+
+                XmlNodeList nodeListLayers = nodeMap.ChildNodes;
+                if (nodeListLayers != null && nodeListLayers.Count > 0)
+                {
+                    for(var i = 0; i < nodeListLayers.Count; i++)
+                    {
+                        XmlNode nodelayer = nodeListLayers[i];
+                        
+                    }
+                }
+                
+
+            }catch(Exception ex)
+            {
+
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,79 @@ namespace LoowooTech.Planner.Common
                 }
             }
         }
+        /// <summary>
+        /// 作用：MapControl加载mxd文件
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月26日09:49:25
+        /// </summary>
+        /// <param name="mapControl"></param>
+        /// <param name="mxdFile"></param>
+        public static void Load(this IMapControl2 mapControl,string mxdFile)
+        {
+            try
+            {
+                if (System.IO.File.Exists(mxdFile) == false)
+                {
+                    return;
+                }
 
+                IMapDocument mapDocument = new MapDocumentClass();
+                if(!mapDocument.get_IsPresent(mxdFile)
+                    ||!mapDocument.get_IsMapDocument(mxdFile)
+                    ||mapDocument.get_IsPasswordProtected(mxdFile)
+                    || mapDocument.get_IsRestricted(mxdFile))
+                {
+                    string message = string.Format("路径：\"{0}\"下的地图文档不正确，请拷贝文件到该路径下。", mxdFile);
+                    System.Diagnostics.Trace.WriteLine(message);
+                }
+                else
+                {
+                    mapDocument.Open(mxdFile, null);
+                    if (mapDocument.DocumentVersion == esriMapDocumentVersionInfo.esriMapDocumentVersionInfoFail)
+                    {
+                        string message = string.Format("路径：\"{0}\"下的地图文档版本不正确，请拷贝该文件到该路径下。", mxdFile);
+                        System.Diagnostics.Trace.WriteLine(message);
+                    }else if (mapDocument.MapCount > 0)
+                    {
+                        IMap map = mapDocument.get_Map(0);
+                        mapControl.Map = map;
+                    }
+                }
+
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+            }
+        }
+        /// <summary>
+        /// 作用：保存mxd文件
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月27日18:13:46
+        /// </summary>
+        /// <param name="mapControl"></param>
+        /// <param name="saveMXDFileName"></param>
+        public static void Save(this IMapControl2 mapControl,string saveMXDFileName)
+        {
+            try
+            {
+                if (System.IO.File.Exists(saveMXDFileName))
+                {
+                    System.IO.File.Delete(saveMXDFileName);
+                }
+                if (System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(saveMXDFileName)) == false)
+                {
+                    System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(saveMXDFileName));
+                }
+
+                IMapDocument mapDocument = new MapDocumentClass();
+                mapDocument.New(saveMXDFileName);
+                mapDocument.ReplaceContents(mapControl.Map as IMxdContents);
+                mapDocument.Save(mapDocument.UsesRelativePaths, true);
+                
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+            }
+        }
     }
 }

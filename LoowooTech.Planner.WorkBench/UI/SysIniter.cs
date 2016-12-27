@@ -34,7 +34,7 @@ namespace LoowooTech.Planner.WorkBench.UI
             }catch(Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex);
-                //LogManager.Log.LogError(ex.ToString());
+               
             }
 
             System.Windows.Forms.Application.DoEvents();
@@ -46,17 +46,15 @@ namespace LoowooTech.Planner.WorkBench.UI
                 runner.Start();
 
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex);
-               // LogManager.Log.LogError(ex.ToString());
             }
 
-            if(form is FormMain)
-            {
-               // WorkBench.AxToolbarControl = (form as FormMain).axToolbarControl1;
-               // (form as FormMain).timer1.Enabled = true;
-            }
+            //if(form is FormMain)
+            //{
+            //}
 
 
         }

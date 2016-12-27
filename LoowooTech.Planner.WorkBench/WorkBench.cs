@@ -57,7 +57,7 @@ namespace LoowooTech.Planner.WorkBench
         {
             get
             {
-                if (_mainForm == null || _mainForm.Created == false || _mainForm.IsDisposed == false)
+                if (_mainForm == null || _mainForm.Created == false || _mainForm.IsDisposed == true)
                 {
                     lock (objToLock)
                     {
@@ -75,8 +75,95 @@ namespace LoowooTech.Planner.WorkBench
                 return _mainForm;
             }
 
-            internal set { _mainForm = value; }
+             set { _mainForm = value; }
         }
+        #endregion
+
+        #region 子窗体
+
+        /// <summary>
+        /// 作用：查找子窗体
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月27日14:02:13
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T FindDocument<T>() where T : ContainerControl
+        {
+            try
+            {
+                if (MainForm == null 
+                    || MainForm.Created == false 
+                    || MainForm.IsDisposed 
+                    || MainForm.MdiChildren == null 
+                    || MainForm.MdiChildren.Length == 0)
+                {
+                    return null;
+                }
+
+                foreach(Form subForm in MainForm.MdiChildren)
+                {
+                    if (subForm.IsDisposed)
+                    {
+                        continue;
+                    }
+
+                    if (subForm.GetType().Equals(typeof(T)) && subForm.Created && subForm.IsDisposed == false)
+                    {
+                        return subForm as T;
+                    }
+                    else
+                    {
+                        DevExpress.XtraEditors.XtraUserControl xtraUserControl = subForm.Tag as DevExpress.XtraEditors.XtraUserControl;
+                        if (xtraUserControl != null && xtraUserControl.IsDisposed == false)
+                        {
+                            return xtraUserControl as T;
+                        }
+                    }
+                }
+
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 作用：显示子窗体
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月27日14:06:07
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T ShowDocument<T>() where T : Form, new()
+        {
+            try
+            {
+
+                T frm = FindDocument<T>();
+                if (frm == null)
+                {
+                    frm = new T();
+                    if (MainForm != null && MainForm.Created && MainForm.IsDisposed == false)
+                    {
+                        frm.MdiParent = MainForm;
+                    }
+                    frm.Show();
+                }
+                else
+                {
+                    frm.Activate();
+                }
+
+                return frm;
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+            }
+            return null;
+        }
+
         #endregion
 
 
@@ -105,7 +192,6 @@ namespace LoowooTech.Planner.WorkBench
             return setted;
         }
 
-
         public static bool SetStatusBarValue(string name,string value)
         {
             bool setted = false;
@@ -120,6 +206,26 @@ namespace LoowooTech.Planner.WorkBench
                 System.Diagnostics.Trace.WriteLine(ex);
             }
             return setted;
+        }
+
+        public static void UpdateUI()
+        {
+            if (MainForm == null)
+                return;
+
+            try
+            {
+                AutoRunner runner = new AutoRunner();
+                runner.XMLConfigFilePath = ConfigFileName;
+                runner.Start();
+
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex);
+            }
+
         }
         #endregion
 

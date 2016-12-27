@@ -36,6 +36,6 @@
     </StatusBar>
   </RibbonControl>
   <AutoRunCommand>
-    <CommandClass AssemblyName="" ClassName="" Parameter="True"/>
+    <CommandClass AssemblyName="LoowooTech.Planner.WorkBench" ClassName="LoowooTech.Planner.WorkBench.UI.CommandShowSketchForm" Parameter="True"/>
   </AutoRunCommand>
 </Workbench>

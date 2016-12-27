@@ -99,6 +99,7 @@
             this.Controls.Add(this.label1);
             this.Name = "SketchForm";
             this.Text = "主窗口";
+            this.Activated += new System.EventHandler(this.SketchForm_Activated);
             this.Load += new System.EventHandler(this.SketchForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.mapMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).EndInit();

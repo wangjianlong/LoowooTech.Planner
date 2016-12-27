@@ -8,6 +8,39 @@ namespace LoowooTech.Planner.Common
 {
     public static class XmlHelper
     {
+        private static XmlDocument _xmlDocument { get; set; }
+        public static void Load(string xmlFile)
+        {
+            _xmlDocument = new XmlDocument();
+            _xmlDocument.Load(xmlFile);
+        }
+        /// <summary>
+        /// 作用：指定xml路径，获取InnerText，调用前  如果xml文件发生改变，需调用load(xmlfile);
+        /// 作者：汪建龙
+        /// 编写时间：2016年12月27日17:19:48
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetValue(string path)
+        {
+            if (_xmlDocument == null)
+            {
+                return string.Empty;
+            }
+            string result = string.Empty;
+            try
+            {
+                XmlNode xn = _xmlDocument.SelectSingleNode(path);
+                result = xn.InnerText;
+            }
+            catch
+            {
+
+            }
+            return result;
+        }
+
+
         /// <summary>
         /// 作用：获取某一属性的值
         /// 作者：汪建龙
@@ -22,7 +55,10 @@ namespace LoowooTech.Planner.Common
             try
             {
 
-                if (xmlNode != null && xmlNode.NodeType == XmlNodeType.Comment && xmlNode.Attributes != null && xmlNode.Attributes[attributeName] != null)
+                if (xmlNode != null 
+                    && xmlNode.NodeType != XmlNodeType.Comment 
+                    && xmlNode.Attributes != null 
+                    && xmlNode.Attributes[attributeName] != null)
                 {
                     attribute = xmlNode.Attributes[attributeName].Value;
                 }
@@ -32,5 +68,7 @@ namespace LoowooTech.Planner.Common
             }
             return attribute;
         }
+
+        
     }
 }

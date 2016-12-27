@@ -89,6 +89,12 @@
     <Compile Include="Forms\SketchForm.Designer.cs">
       <DependentUpon>SketchForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TOCPad.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\TOCPad.Designer.cs">
+      <DependentUpon>TOCPad.cs</DependentUpon>
+    </Compile>
     <Compile Include="InstanceHelper.cs" />
     <Compile Include="Logs\LogManager.cs" />
     <Compile Include="Logs\Models\LogItem.cs" />
@@ -124,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SketchForm.resx">
       <DependentUpon>SketchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TOCPad.resx">
+      <DependentUpon>TOCPad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>

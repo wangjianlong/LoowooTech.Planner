@@ -1,4 +1,6 @@
-﻿using LoowooTech.Planner.WorkBench.Commands;
+﻿using LoowooTech.Planner.Common;
+using LoowooTech.Planner.WorkBench.Commands;
+using LoowooTech.Planner.WorkBench.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,20 @@ namespace LoowooTech.Planner.WorkBench.UI
         {
             try
             {
-
+                SketchForm sketchForm = WorkBench.FindDocument<SketchForm>();
+                if (sketchForm == null)
+                {
+                    sketchForm = WorkBench.ShowDocument<SketchForm>();
+                    if (PubishFunction.LoadDataState)
+                    {
+                        sketchForm.LoadMapData();
+                    }
+                    
+                }
+                else
+                {
+                    sketchForm.Activate();
+                }
 
 
             }catch(Exception ex)

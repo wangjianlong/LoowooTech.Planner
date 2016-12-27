@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MapDataLoadConfig TemplateMXDFile="Config\TemplateMXD.mxd" SystemMXDFile="Config\MapDocument.mxd" DirectlyLoadSystemMXDIfExist="True">
+  
+</MapDataLoadConfig>
